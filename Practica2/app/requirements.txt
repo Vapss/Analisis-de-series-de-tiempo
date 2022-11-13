@@ -16,4 +16,5 @@ pydantic
 aiofiles
 python-multipart
 Markdown
-mimetypes
+Pillow
+uvicorn

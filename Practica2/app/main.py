@@ -15,8 +15,11 @@ from fastapi.templating import Jinja2Templates
 from fastapi import FastAPI, Request, APIRouter
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
-from library.helper import *
-from routers import unsplash
+from library.helpers import *
+
+import mimetypes
+
+mimetypes.init()
 
 
 class Item(BaseModel):
@@ -24,18 +27,20 @@ class Item(BaseModel):
 
 app = FastAPI()
 
-router = APIRouter()
+
 
 
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-@router.get("/", response_class=HTMLResponse)
+
+
+@app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     data = openfile("home.md")
     return templates.TemplateResponse("page.html", {"request": request, "data": data})
     
-@router.get("/page/{page_name}", response_class=HTMLResponse)
+@app.get("/page/{page_name}", response_class=HTMLResponse)
 async def show_page(request: Request, page_name: str):
     data = openfile(page_name+".md")
     return templates.TemplateResponse("page.html", {"request": request, "data": data})
